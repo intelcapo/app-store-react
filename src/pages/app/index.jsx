@@ -4,8 +4,8 @@ import MyAccountPage from "../myAccount";
 import MyOrdersPage from "../myOrders";
 import NotFoundPage from "../notFound";
 import SignInPage from "../signIn";
-import NavBar from "../../components/navBar";
 import "./App.css";
+import Layout from "../../components/layout";
 
 const AppRoutes = () => {
 	let routes = useRoutes([
@@ -37,8 +37,9 @@ const AppRoutes = () => {
 function App() {
 	return (
 		<BrowserRouter>
-			<NavBar />
-			<AppRoutes />
+			<Layout>
+				<AppRoutes />
+			</Layout>
 		</BrowserRouter>
 	);
 }
