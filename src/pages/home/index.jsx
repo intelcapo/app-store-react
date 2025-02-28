@@ -6,7 +6,7 @@ function HomePage() {
 	const [products, setProducts] = useState([]);
 
 	useEffect(() => {
-		fetch("https://api.escuelajs.co/api/v1/products")
+		fetch("https://fakestoreapi.com/products")
 			.then((productsResponse) => {
 				return productsResponse.json();
 			})

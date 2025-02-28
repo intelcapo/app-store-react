@@ -29,7 +29,7 @@ const ProductDetail = () => {
 			{product !== null ? (
 				<div className="p-10">
 					<figure>
-						<img src={product.images[0]} alt={product.title} />
+						<img src={product.image} alt={product.title} />
 					</figure>
 					<p>
 						<span className="text-3xl">${product.price}</span>
