@@ -7,6 +7,7 @@ import NotFoundPage from "../notFound";
 import SignInPage from "../signIn";
 import "./App.css";
 import Layout from "../../components/layout";
+import CheckoutSideMenu from "../../components/checkoutSideMenu";
 
 const AppRoutes = () => {
 	let routes = useRoutes([
@@ -41,6 +42,7 @@ function App() {
 			<BrowserRouter>
 				<Layout>
 					<AppRoutes />
+					<CheckoutSideMenu />
 				</Layout>
 			</BrowserRouter>
 		</ShoppingCartProvider>

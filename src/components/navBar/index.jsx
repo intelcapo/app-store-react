@@ -105,7 +105,12 @@ const NavBar = () => {
 						Sign in
 					</NavLink>
 				</li>
-				<li className="flex items-center">
+				<li
+					className="flex items-center"
+					onClick={() => {
+						context.openShoppingCart();
+					}}
+				>
 					<ShoppingBagIcon className="w-6 h-6 text-black/60" />{" "}
 					<div>{context.counter}</div>
 				</li>

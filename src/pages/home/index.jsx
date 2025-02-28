@@ -15,7 +15,6 @@ function HomePage() {
 			});
 	}, []);
 
-	console.log(products);
 	return (
 		<>
 			<h1>Home</h1>
