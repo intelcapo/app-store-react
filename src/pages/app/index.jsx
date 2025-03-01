@@ -2,12 +2,13 @@ import { useRoutes, BrowserRouter } from "react-router-dom";
 import { ShoppingCartProvider } from "../../context";
 import HomePage from "../home";
 import MyAccountPage from "../myAccount";
+import MyOrderPage from "../myOrder";
 import MyOrdersPage from "../myOrders";
 import NotFoundPage from "../notFound";
 import SignInPage from "../signIn";
-import "./App.css";
 import Layout from "../../components/layout";
 import CheckoutSideMenu from "../../components/checkoutSideMenu";
+import "./App.css";
 
 const AppRoutes = () => {
 	let routes = useRoutes([
@@ -22,6 +23,14 @@ const AppRoutes = () => {
 		{
 			path: "/my-orders",
 			element: <MyOrdersPage />,
+		},
+		{
+			path: "/my-orders/last",
+			element: <MyOrderPage />,
+		},
+		{
+			path: "/my-orders/:id",
+			element: <MyOrderPage />,
 		},
 		{
 			path: "/sign-in",

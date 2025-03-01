@@ -6,7 +6,6 @@ import { ShoppingCartContext } from "../../context";
 const ProductDetail = () => {
 	const context = useContext(ShoppingCartContext);
 	const product = context.productActive;
-	console.log(product);
 
 	return (
 		<aside

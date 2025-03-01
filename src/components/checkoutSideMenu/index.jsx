@@ -4,6 +4,7 @@ import { XMarkIcon } from "@heroicons/react/16/solid";
 import { ShoppingCartContext } from "../../context";
 import OrderCard from "../orderCard";
 import { totalPrice } from "../../utils";
+import { Link } from "react-router-dom";
 
 const CheckoutSideMenu = () => {
 	const context = useContext(ShoppingCartContext);
@@ -13,15 +14,18 @@ const CheckoutSideMenu = () => {
 		context.removeProductsToCart(product);
 	};
 
-	const renderTotal = () => {
-		return (
-			<div className="flex justify-between px-6 py-4">
-				<span className="text-3xl bold">Total</span>
-				<span className="text-3xl bold text-green-400">
-					$ {totalPrice(cartProducts)}
-				</span>
-			</div>
-		);
+	const createNewOrder = () => {
+		const newOrder = {
+			id: Date.now(),
+			date: new Date().toISOString(),
+			products: cartProducts,
+			totalProducts: cartProducts.length,
+			totalPrice: totalPrice(cartProducts),
+		};
+
+		context.createOrder(newOrder);
+		context.resetCartProducts();
+		context.closeShoppingCart();
 	};
 
 	return (
@@ -30,11 +34,11 @@ const CheckoutSideMenu = () => {
 				context.isShoppingCartActive ? "flex" : "hidden"
 			}`}
 		>
-			<div className="flex justify-between items-center p-6">
+			<div className="flex justify-between items-center p-6 bg-gray-500 text-white">
 				<h2 className="ont-medium text-xl">My order</h2>
 				<div>
 					<XMarkIcon
-						className="h-6 w-6 text-black cursor-pointer"
+						className="h-6 w-6 text-white cursor-pointer"
 						onClick={() => {
 							context.closeShoppingCart();
 						}}
@@ -54,7 +58,22 @@ const CheckoutSideMenu = () => {
 						</>
 					))}
 			</div>
-			<div>{renderTotal()}</div>
+			<div className="flex justify-between px-6 py-4">
+				<span className="text-3xl bold">Total</span>
+				<span className="text-3xl bold text-green-400">
+					$ {totalPrice(cartProducts)}
+				</span>
+			</div>
+			<div className="flex w-full justify-center items-center cursor-pointer absolute bottom-2">
+				<Link to="/my-orders/last">
+					<button
+						className="w-80 h-12 text-3xl bold bg-green-600 rounded-lg text-white cursor-pointer"
+						onClick={() => createNewOrder()}
+					>
+						Checkout
+					</button>
+				</Link>
+			</div>
 		</aside>
 	);
 };

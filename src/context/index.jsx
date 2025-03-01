@@ -8,6 +8,7 @@ export const ShoppingCartProvider = ({ children }) => {
 	const [productActive, setProductActive] = useState(null);
 	const [cartProducts, setCartProducts] = useState([]);
 	const [isShoppingCartActive, setIsShoppingCartActive] = useState(false);
+	const [orders, setOrders] = useState([]);
 
 	const openProductDetail = () => {
 		setIsProductDetailOpen(true);
@@ -42,6 +43,21 @@ export const ShoppingCartProvider = ({ children }) => {
 		setIsShoppingCartActive(false);
 	};
 
+	const resetCartProducts = () => {
+		setCartProducts([]);
+	};
+
+	const createOrder = (order) => {
+		const newOrders = [...orders, order];
+		console.log(newOrders);
+		setOrders(newOrders);
+	};
+
+	const getOrderById = (orderId) => {
+		const order = orders.find((ord) => ord.id == orderId);
+		return order;
+	};
+
 	return (
 		<ShoppingCartContext.Provider
 			value={{
@@ -58,6 +74,10 @@ export const ShoppingCartProvider = ({ children }) => {
 				isShoppingCartActive,
 				openShoppingCart,
 				closeShoppingCart,
+				resetCartProducts,
+				orders,
+				createOrder,
+				getOrderById,
 			}}
 		>
 			{children}
