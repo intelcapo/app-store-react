@@ -26,6 +26,7 @@ const CheckoutSideMenu = () => {
 		context.createOrder(newOrder);
 		context.resetCartProducts();
 		context.closeShoppingCart();
+		context.setSearchByTitle(null); //reseteamos el estado del filtro del titulo
 	};
 
 	return (

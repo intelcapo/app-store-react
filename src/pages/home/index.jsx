@@ -2,9 +2,18 @@ import Card from "../../components/card";
 import ProductDetail from "../../components/productDetail";
 import { useContext } from "react";
 import { ShoppingCartContext } from "../../context";
+import { useParams } from "react-router-dom";
 
 function HomePage() {
 	const context = useContext(ShoppingCartContext);
+	const { category } = useParams();
+
+	if (category != null) {
+		context.setCurrentCategory(category);
+	} else {
+		context.setCurrentCategory("all");
+	}
+
 	const products = context.productsFiltered;
 
 	const renderProducts = () => {

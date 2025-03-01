@@ -17,6 +17,10 @@ const AppRoutes = () => {
 			element: <HomePage />,
 		},
 		{
+			path: "/:category",
+			element: <HomePage />,
+		},
+		{
 			path: "/my-account",
 			element: <MyAccountPage />,
 		},

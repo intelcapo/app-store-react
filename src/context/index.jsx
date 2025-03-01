@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const ShoppingCartContext = createContext();
 
@@ -22,7 +22,6 @@ export const ShoppingCartProvider = ({ children }) => {
 		const newItems = [...cartProducts, product];
 		setCartProducts(newItems);
 		updateCartCounter(newItems);
-		console.log(newItems);
 	};
 
 	const removeProductsToCart = (product) => {
@@ -49,7 +48,6 @@ export const ShoppingCartProvider = ({ children }) => {
 
 	const createOrder = (order) => {
 		const newOrders = [...orders, order];
-		console.log(newOrders);
 		setOrders(newOrders);
 	};
 
@@ -68,6 +66,7 @@ export const ShoppingCartProvider = ({ children }) => {
 			.then((data) => {
 				setProducts(data);
 				setProductsFiltered(data);
+				createCategories(data);
 			});
 	}, []);
 
@@ -82,13 +81,110 @@ export const ShoppingCartProvider = ({ children }) => {
 		return productsList;
 	};
 
-	useEffect(() => {
-		if (searchByTitle) {
-			setProductsFiltered(getProductsByTitle(searchByTitle));
-		} else {
-			setProductsFiltered(products);
+	const [categories, setCategories] = useState([]);
+
+	const createCategories = (products) => {
+		let categoriesList = [];
+		products.forEach((prd) => {
+			const category = prd.category.toLowerCase();
+			if (!categoriesList.includes(category)) {
+				categoriesList.push(category);
+			}
+		});
+
+		categoriesList.sort((a, b) => {
+			if (a < b) {
+				return -1;
+			}
+			if (a > b) {
+				return 1;
+			}
+			return 0;
+		});
+		setCategories(categoriesList);
+	};
+
+	const [currentCategory, setCurrentCategory] = useState("");
+
+	const getFilteredProductsBy = (
+		filterType,
+		products,
+		productTitle,
+		productCategory
+	) => {
+		if (!filterType) {
+			return products;
 		}
-	}, [searchByTitle, products]);
+
+		if (filterType == "BY_CATEGORY") {
+			return productCategory.toLowerCase() != "all"
+				? getProductsByCategory(productCategory)
+				: products;
+		}
+
+		if (filterType == "BY_TITLE") {
+			return getProductsByTitle(productTitle);
+		}
+
+		if (filterType == "BY_CATEGORY_AND_TITLE") {
+			return getProductsByCategory(productCategory).filter((prod) =>
+				prod.title.toLowerCase().includes(productTitle.toLowerCase())
+			);
+		}
+	};
+
+	useEffect(() => {
+		if (searchByTitle && currentCategory)
+			setProductsFiltered(
+				getFilteredProductsBy(
+					"BY_CATEGORY_AND_TITLE",
+					products,
+					searchByTitle,
+					currentCategory
+				)
+			);
+		if (!searchByTitle && currentCategory)
+			setProductsFiltered(
+				getFilteredProductsBy(
+					"BY_CATEGORY",
+					products,
+					searchByTitle,
+					currentCategory
+				)
+			);
+		if (searchByTitle && !currentCategory)
+			setProductsFiltered(
+				getFilteredProductsBy(
+					"BY_TITLE",
+					products,
+					searchByTitle,
+					currentCategory
+				)
+			);
+		if (!searchByTitle && !currentCategory)
+			setProductsFiltered(
+				getFilteredProductsBy(
+					null,
+					products,
+					searchByTitle,
+					currentCategory
+				)
+			);
+	}, [searchByTitle, products, currentCategory]);
+
+	const getProductsByCategory = (categoryName) => {
+		let productsList = [];
+
+		if (categoryName.toLowerCase() === "all" || categoryName == "") {
+			productsList = products;
+		} else {
+			productsList = products.filter(
+				(prd) => prd.category.toLowerCase() === categoryName
+			);
+		}
+
+		return productsList;
+	};
 
 	return (
 		<ShoppingCartContext.Provider
@@ -114,6 +210,8 @@ export const ShoppingCartProvider = ({ children }) => {
 				setProducts,
 				productsFiltered,
 				setSearchByTitle,
+				categories,
+				setCurrentCategory,
 			}}
 		>
 			{children}
