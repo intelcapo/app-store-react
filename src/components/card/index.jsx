@@ -1,6 +1,7 @@
 import { CheckIcon, PlusIcon } from "@heroicons/react/16/solid";
 import { useContext } from "react";
 import { ShoppingCartContext } from "../../context";
+import "./card.css";
 
 const Card = ({ product }) => {
 	const { title, category, price, image, id } = product;
@@ -40,18 +41,18 @@ const Card = ({ product }) => {
 
 	return (
 		<div
-			className="bg-white cursor-pointer w-56 h-120 rounded-lg shadow-lg"
+			className="card flex flex-col items-center bg-white cursor-pointer rounded-lg shadow-lg"
 			onClick={() => {
 				context.setProductActive(product);
 				context.openProductDetail();
 			}}
 		>
-			<figure className="relative mb-2 w-full h-4/5">
+			<figure className="card__figure relative mb-2  h-4/5">
 				<span className="absolute bottom-0 left-0 bg-blue-50 rounded-lg text-black text-xs m-2 px-3 py-0.5">
 					{category || ""}
 				</span>
 				<img
-					className="w-full object-cover rounded-lg object-cover bg-cover"
+					className="card__img rounded-lg "
 					src={image}
 					alt={title}
 				/>

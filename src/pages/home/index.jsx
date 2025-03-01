@@ -1,28 +1,48 @@
-import { useState, useEffect } from "react";
 import Card from "../../components/card";
 import ProductDetail from "../../components/productDetail";
+import { useContext } from "react";
+import { ShoppingCartContext } from "../../context";
 
 function HomePage() {
-	const [products, setProducts] = useState([]);
+	const context = useContext(ShoppingCartContext);
+	const products = context.productsFiltered;
 
-	useEffect(() => {
-		fetch("https://fakestoreapi.com/products")
-			.then((productsResponse) => {
-				return productsResponse.json();
-			})
-			.then((data) => {
-				setProducts(data);
-			});
-	}, []);
-
+	const renderProducts = () => {
+		if (products.length > 0) {
+			return (
+				<div className="grid gap-4 grid-cols-4 w-full max-w-screen-lg">
+					{products?.map((product) => (
+						<Card key={product.id} product={product} />
+					))}
+				</div>
+			);
+		} else {
+			return (
+				<div className="flex justify-center items-center">
+					Sorry, we couldn&apos;t find the items that you are looking
+					for
+				</div>
+			);
+		}
+	};
 	return (
 		<>
-			<h1>Home</h1>
-			<div className="grid gap-4 grid-cols-4 w-full max-w-screen-lg">
-				{products?.map((product) => (
-					<Card key={product.id} product={product} />
-				))}
+			<div className="flex flex-col items-center justify-center relative w-80 mb-4 gap-4">
+				<h1 className="font-medium text-xl">
+					Exclusive products for you!
+				</h1>
+				<input
+					type="text"
+					placeholder="Search a product"
+					name="search"
+					id="search"
+					className="rounded-lg border border-black w-80 p-4 mb-4 focus:outline-none"
+					onChange={(e) => {
+						context.setSearchByTitle(e.target.value);
+					}}
+				/>
 			</div>
+			{renderProducts()}
 			<ProductDetail />
 		</>
 	);

@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 export const ShoppingCartContext = createContext();
 
@@ -58,6 +58,38 @@ export const ShoppingCartProvider = ({ children }) => {
 		return order;
 	};
 
+	const [products, setProducts] = useState([]);
+
+	useEffect(() => {
+		fetch("https://fakestoreapi.com/products")
+			.then((productsResponse) => {
+				return productsResponse.json();
+			})
+			.then((data) => {
+				setProducts(data);
+				setProductsFiltered(data);
+			});
+	}, []);
+
+	const [productsFiltered, setProductsFiltered] = useState([]);
+
+	const [searchByTitle, setSearchByTitle] = useState("");
+
+	const getProductsByTitle = (title) => {
+		const productsList = products.filter((prd) =>
+			prd.title.toLowerCase().includes(title.toLowerCase())
+		);
+		return productsList;
+	};
+
+	useEffect(() => {
+		if (searchByTitle) {
+			setProductsFiltered(getProductsByTitle(searchByTitle));
+		} else {
+			setProductsFiltered(products);
+		}
+	}, [searchByTitle, products]);
+
 	return (
 		<ShoppingCartContext.Provider
 			value={{
@@ -78,6 +110,10 @@ export const ShoppingCartProvider = ({ children }) => {
 				orders,
 				createOrder,
 				getOrderById,
+				products,
+				setProducts,
+				productsFiltered,
+				setSearchByTitle,
 			}}
 		>
 			{children}

@@ -1,0 +1,10 @@
+.card__figure {
+	width: 200px;
+	height: 180px;
+}
+
+.card__img {
+	width: inherit;
+	height: inherit;
+	object-fit: contain;
+}
